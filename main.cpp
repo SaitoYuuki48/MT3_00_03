@@ -70,10 +70,10 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale)
 Vector3 Transform(Vector3 vector, Matrix4x4 matrix)
 {
 	Vector3 result;
-	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[1][0] + 1.0f * matrix.m[3][0];
+	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
 	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
 	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
-	float w = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
+	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
 	assert(w != 0.0f);
 	result.x /= w;
 	result.y /= w;
@@ -86,20 +86,20 @@ static const int kColumnWidth = 60;
 
 void VectorScreenPrintf(int x, int y, const Vector3& vector3, const char* name)
 {
-	Novice::ScreenPrintf(x + 1 * kColumnWidth, y + kRowHeight, "%6.02f", vector3.x);
-	Novice::ScreenPrintf(x + 2 * kColumnWidth, y + kRowHeight, "%6.02f", vector3.y);
-	Novice::ScreenPrintf(x + 3 * kColumnWidth, y + kRowHeight, "%6.02f", vector3.z);
-	Novice::ScreenPrintf(x + 4 * kColumnWidth, y + kRowHeight, "%s", name);
+	Novice::ScreenPrintf(x, y, "%0.02f", vector3.x);
+	Novice::ScreenPrintf(x + kColumnWidth, y, "%0.02f", vector3.y);
+	Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%0.02f", vector3.z);
+	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", name);
 }
 
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* name) 
 {
-	Novice::ScreenPrintf(x, y, "%s", name);
+	Novice::ScreenPrintf(x, y + kRowHeight, "%s", name);
 	for (int row = 0; row < 4; ++row)
 	{
 		for (int column = 0; column < 4; ++column) 
 		{
-			Novice::ScreenPrintf(x + column * kColumnWidth, y + row * kRowHeight + 20, "%6.02f", matrix.m[row][column]);
+			Novice::ScreenPrintf(x + column * kColumnWidth, y + row * kRowHeight + 40, "%6.02f", matrix.m[row][column]);
 		}
 	}
 }
